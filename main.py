@@ -6,7 +6,7 @@ import requests
 
 app = Flask(__name__)
 
-@app.route("/",methods=["GET" , "POST"]) #NE DELA NITI MAL
+@app.route("/",methods=["GET" , "POST"])
 def weatherFor():
 
     apiKey = "8d80c9afce8da5a191e74cb02596e828"
@@ -23,7 +23,7 @@ def weatherFor():
 
 
     def getDate(index):
-        dt = datetime.strptime(dataF["list"][index-1]["dt_txt"], "%Y-%m-%d %H:%M:%S")
+        dt = datetime.strptime(dataF["list"][index-1]["dt_txt"], "%Y-%m-%d %H:%M:%S") #ai
         date_only = dt.date()
         return date_only
 
@@ -45,23 +45,40 @@ def weatherFor():
             print("---------------------------DANES----------------------------")
             
             vremeFor = {
-                "čas" : dataF["list"][index-1]["dt_txt"],
-                "temp" : dataF["list"][index-1]["main"]["temp"],
-                "status": dataF["list"][index-1]["weather"]["main"],
-                "wind": dataF["list"][index-1]["wind"]["speed"]
+                "čas" : dataF["list"][index]["dt_txt"],
+                "temp" : dataF["list"][index]["main"]["temp"],
+                "status": dataF["list"][index]["weather"][0]["main"],
+                "wind": dataF["list"][index]["wind"]["speed"],
+                "index" : index
             }
 
             forToday[f"{getUra(index)}"] = vremeFor
-
             print(forToday)
         
         elif tommorow ==  dan:
             print("---------------------------TOMMOROW----------------------------")
+            vremeForT = {
+                "čas" : dataF["list"][index]["dt_txt"],
+                "temp" : dataF["list"][index]["main"]["temp"],
+                "status": dataF["list"][index]["weather"][0]["main"],
+                "wind": dataF["list"][index]["wind"]["speed"],
+                "index" : index
+            }
+            forTommorow[f"{getUra(index)}"] = vremeForT
+            print(forTommorow)
 
 
         elif dayAfterTom ==  dan:
             print("---------------------------DAY AFTER TOMMOROW----------------------------")
-
+            vremeForDT = {
+                "čas" : dataF["list"][index]["dt_txt"],
+                "temp" : dataF["list"][index]["main"]["temp"],
+                "status": dataF["list"][index]["weather"][0]["main"],
+                "wind": dataF["list"][index]["wind"]["speed"],
+                "index" : index
+            }
+            forDayAftrTom[f"{getUra(index)}"] = vremeForDT
+            print(forDayAftrTom)
 
 
 
@@ -97,7 +114,7 @@ def weatherFor():
         }
     }'''    
 
-    return render_template("index.html")
+    return render_template("index.html", forToday=forToday,forTommorow = forTommorow, forDayAftrTom = forDayAftrTom)
 
 
 if __name__ == '__main__':

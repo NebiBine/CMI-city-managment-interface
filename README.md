@@ -1,2 +1,2 @@
 # CMI-city-managment-interface
-zaključna naloga 
+za testirat posamezne bloke kode v codespace. brez logina...
